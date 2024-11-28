@@ -1,52 +1,31 @@
-#include <stdbool.h>
-
-int isBipartite(int **arr, int size) {
-    int coloured[size];
+void bipartate(int ** arr,int size){
+    int rear=0,front=0;
+    int arr[size];
     int visited[size];
-    
-    // Initialize coloured and visited arrays
-    for (int i = 0; i < size; i++) {
-        coloured[i] = -1;  // -1 means uncolored
-        visited[i] = 0;    // 0 means unvisited
+    int coloured[size];
+    for(int i=0;i<size;i++){
+        visited[i]=0;
+        coloured[i]=-1;
     }
-
-    int que[size];
-    int rear, front;
-
-    // Check each component in the graph
-    for (int startvertex = 0; startvertex < size; startvertex++) {
-        // Only perform BFS if the vertex is unvisited
-        if (visited[startvertex] == 0) {
-            rear = -1;
-            front = 0;
-
-            // Start BFS from this node
-            rear++;
-            coloured[startvertex] = 0;  // Start coloring with 0
-            que[rear] = startvertex;
-            visited[startvertex] = 1;
-
-            while (front <= rear) {
-                int val = que[front++];
-
-                for (int i = 0; i < size; i++) {
-                    if (arr[val][i] == 1) {  // Check for edges
-                        if (coloured[i] == -1) {  // If the node is not colored
-                            // Color it with opposite color of `val`
-                            coloured[i] = 1 - coloured[val];
-                            que[++rear] = i;
-                            visited[i] = 1;  // Mark as visited
-                        } 
-                        else if (coloured[i] == coloured[val]) {
-                            // If adjacent nodes have the same color, it's not bipartite
-                            return 0;
-                        }
-                    }
+    int start=0;
+    visited[start]=1;
+    arr[rear++]=start;
+    coloured[start]=0;
+    while(front<rear){
+        int num=arr[front++];
+        for(int i=0;i<size;i++){
+            if(arr[num][i]==1){
+                if(coloured[i]==-1){
+                    if(coloured[num]==1)coloured[i]=0;
+                    else coloured[i]=1;
+                }
+                else{
+                    if(coloured[i]==coloured[num]) return -1;
                 }
             }
         }
-    }
 
-    // If we complete BFS without issues, the graph is bipartite
-    return 1;
+    }
+    
+
 }
